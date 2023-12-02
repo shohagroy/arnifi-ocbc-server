@@ -1,2 +1,6 @@
 export const countryFilterableFields: string[] = ["search"];
-export const countrySearchableFields: string[] = ["name"];
+export const countrySearchableFields: string[] = [
+  "name",
+  "postalCode",
+  "countryCode",
+];

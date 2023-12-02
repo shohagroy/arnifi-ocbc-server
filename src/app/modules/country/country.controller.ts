@@ -6,8 +6,18 @@ import httpStatus from "http-status";
 import { paginationFields } from "../../../constants/pagination";
 import { countryFilterableFields } from "./country.constants";
 import pick from "../../../shared/pick";
+import ApiError from "../../../errors/ApiError";
 
 const create = catchAsync(async (req: Request, res: Response) => {
+  const isExists = await countryService.findOne(req.body);
+
+  if (isExists) {
+    throw new ApiError(
+      httpStatus.CONFLICT,
+      `${req.body?.name} country name is already exists!`
+    );
+  }
+
   const result = await countryService.insertIntoDB(req.body);
 
   sendResponse(res, {
@@ -34,6 +44,16 @@ const getAll = catchAsync(async (req: Request, res: Response) => {
 
 const updateOne = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
+
+  const isExists = await countryService.findOne(req.body);
+
+  if (isExists) {
+    throw new ApiError(
+      httpStatus.CONFLICT,
+      `${req.body.name} country name is already exists!`
+    );
+  }
+
   const result = await countryService.updateById(id, req.body);
 
   sendResponse(res, {
@@ -46,6 +66,7 @@ const updateOne = catchAsync(async (req: Request, res: Response) => {
 
 const deleteOne = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
+
   const result = await countryService.deleteById(id);
 
   sendResponse(res, {

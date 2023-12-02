@@ -70,7 +70,11 @@ const updateById = async (
 ): Promise<Country | null> => {
   const result = await prisma.country.update({
     where: { id },
-    data: payload,
+    data: {
+      name: payload.name,
+      postalCode: payload.postalCode,
+      countryCode: payload.countryCode,
+    },
   });
 
   return result;
@@ -86,9 +90,22 @@ const deleteById = async (id: string): Promise<Country | null> => {
   return result;
 };
 
+const findOne = async (data: Country): Promise<Country | null> => {
+  const result = await prisma.country.findUnique({
+    where: {
+      name: data.name,
+      postalCode: data.postalCode,
+      countryCode: data.countryCode,
+    },
+  });
+
+  return result;
+};
+
 export const countryService = {
   insertIntoDB,
   findALl,
   updateById,
   deleteById,
+  findOne,
 };

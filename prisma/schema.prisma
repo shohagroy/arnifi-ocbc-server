@@ -22,9 +22,9 @@ enum Gender {
 
 model Country {
   id          String    @id @default(uuid())
-  name        String
-  countryCode String
-  postalCode  String
+  name        String    @unique
+  countryCode String    @unique
+  postalCode  String    @unique
   addresses   Address[]
 
   createdAt DateTime @default(now())
