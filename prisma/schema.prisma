@@ -27,6 +27,9 @@ model Country {
   postalCode  String
   addresses   Address[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("countries")
 }
 

@@ -3,6 +3,9 @@ import catchAsync from "../../../shared/catchAsync";
 import { countryService } from "./country.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
+import { paginationFields } from "../../../constants/pagination";
+import { countryFilterableFields } from "./country.constants";
+import pick from "../../../shared/pick";
 
 const create = catchAsync(async (req: Request, res: Response) => {
   const result = await countryService.insertIntoDB(req.body);
@@ -16,15 +19,16 @@ const create = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAll = catchAsync(async (req: Request, res: Response) => {
-  const result = await countryService.findALl();
+  const paginationOptions = pick(req.query, paginationFields);
+  const filters = pick(req.query, countryFilterableFields);
+  const result = await countryService.findALl(paginationOptions, filters);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: result?.length
-      ? "Countries Retrieved Successfully!"
-      : "No Country Found!",
-    data: result,
+    message: "Countries Retrieved Successfully",
+    data: result?.data,
+    meta: result?.meta,
   });
 });
 

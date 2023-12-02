@@ -15,6 +15,8 @@ CREATE TABLE "countries" (
     "name" TEXT NOT NULL,
     "countryCode" TEXT NOT NULL,
     "postalCode" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "countries_pkey" PRIMARY KEY ("id")
 );
