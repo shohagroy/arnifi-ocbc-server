@@ -20,13 +20,25 @@ enum Gender {
   female
 }
 
+model Country {
+  id          String    @id @default(uuid())
+  name        String
+  countryCode String
+  postalCode  String
+  addresses   Address[]
+
+  @@map("countries")
+}
+
 model Address {
   id         String  @id @default(uuid())
   line1      String
   line2      String?
-  country    String
+  countryId  String
   postalCode String
   User       User?
+
+  country Country @relation(fields: [countryId], references: [id])
 
   @@map("addresses")
 }
