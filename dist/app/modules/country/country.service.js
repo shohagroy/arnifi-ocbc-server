@@ -33,7 +33,7 @@ const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
-const findALl = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0, function* () {
+const findAll = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0, function* () {
     const { size, page, skip } = paginationHelper_1.paginationHelpers.calculatePagination(paginationOptions);
     const { search } = filters, filterData = __rest(filters, ["search"]);
     const andConditions = [];
@@ -74,7 +74,11 @@ const findALl = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0
 const updateById = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.country.update({
         where: { id },
-        data: payload,
+        data: {
+            name: payload.name,
+            postalCode: payload.postalCode,
+            countryCode: payload.countryCode,
+        },
     });
     return result;
 });
@@ -86,9 +90,25 @@ const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
+const findOne = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.country.findUnique({
+        where: {
+            name: data.name,
+            postalCode: data.postalCode,
+            countryCode: data.countryCode,
+        },
+    });
+    return result;
+});
+const findAllCountry = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.country.findMany();
+    return result;
+});
 exports.countryService = {
     insertIntoDB,
-    findALl,
+    findAll,
     updateById,
     deleteById,
+    findOne,
+    findAllCountry,
 };

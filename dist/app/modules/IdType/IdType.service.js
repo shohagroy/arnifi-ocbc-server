@@ -23,12 +23,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userService = void 0;
+exports.idTypeService = void 0;
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
-const user_constants_1 = require("./user.constants");
+const IdType_constants_1 = require("./IdType.constants");
 const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.user.create({
+    const result = yield prisma_1.default.iDType.create({
         data,
     });
     return result;
@@ -39,7 +39,7 @@ const findAll = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0
     const andConditions = [];
     if (search) {
         andConditions.push({
-            OR: user_constants_1.userSearchableFields.map((field) => ({
+            OR: IdType_constants_1.idTypeSearchableFields.map((field) => ({
                 [field]: {
                     contains: search,
                     mode: "insensitive",
@@ -47,19 +47,32 @@ const findAll = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0
             })),
         });
     }
+    if (Object.keys(filterData).length > 0) {
+        andConditions.push({
+            AND: Object.keys(filterData).map((key) => {
+                return {
+                    [key]: {
+                        equals: filterData[key],
+                    },
+                };
+            }),
+        });
+    }
     const whereConditions = andConditions.length > 0 ? { AND: andConditions } : {};
-    const result = yield prisma_1.default.user.findMany({
+    const result = yield prisma_1.default.iDType.findMany({
         where: whereConditions,
-        include: {},
+        include: {
+            country: true,
+        },
         skip,
         take: size,
         orderBy: paginationOptions.sortBy && paginationOptions.sortOrder
             ? { [paginationOptions.sortBy]: paginationOptions.sortOrder }
             : {
-                fullName: "asc",
+                tittle: "asc",
             },
     });
-    const total = yield prisma_1.default.user.count({
+    const total = yield prisma_1.default.iDType.count({
         where: whereConditions,
     });
     return {
@@ -72,32 +85,48 @@ const findAll = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0
     };
 });
 const updateById = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.user.update({
+    const result = yield prisma_1.default.iDType.update({
         where: { id },
-        data: payload,
+        data: {
+            tittle: payload.tittle,
+            countryId: payload.countryId,
+        },
     });
     return result;
 });
 const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.user.delete({
+    const result = yield prisma_1.default.iDType.delete({
         where: {
             id,
         },
     });
     return result;
 });
-const findOne = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.user.findUnique({
+const findOne = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.iDType.findUnique({
         where: {
-            email,
+            tittle: payload.tittle,
+            countryId: payload.countryId,
         },
     });
     return result;
 });
-exports.userService = {
+const findAllType = (countryId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.iDType.findMany({
+        where: {
+            countryId,
+        },
+        orderBy: {
+            tittle: "asc",
+        },
+    });
+    return result;
+});
+exports.idTypeService = {
     insertIntoDB,
     findAll,
     updateById,
     deleteById,
     findOne,
+    findAllType,
 };

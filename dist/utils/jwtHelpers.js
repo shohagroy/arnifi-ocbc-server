@@ -7,8 +7,8 @@ exports.jwtHelpers = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const envconfig_1 = __importDefault(require("../config/envconfig"));
 const createToken = (user, expiresIn) => {
-    const { id, name, email, role, profileImg } = user;
-    const payload = { id, name, email, role, avatar: profileImg === null || profileImg === void 0 ? void 0 : profileImg.secure_url };
+    const { id, fullName, email, role } = user;
+    const payload = { id, fullName, email, role };
     return jsonwebtoken_1.default.sign(payload, envconfig_1.default.secrect_token_key, {
         expiresIn,
     });

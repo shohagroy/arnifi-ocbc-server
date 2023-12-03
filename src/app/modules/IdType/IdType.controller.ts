@@ -1,43 +1,44 @@
 import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
-import { countryService } from "./country.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import { paginationFields } from "../../../constants/pagination";
-import { countryFilterableFields } from "./country.constants";
+import { idTypeFilterableFields } from "./IdType.constants";
 import pick from "../../../shared/pick";
 import ApiError from "../../../errors/ApiError";
-import { Country } from "@prisma/client";
+import { IDType } from "@prisma/client";
+import { idTypeService } from "./IdType.service";
 
 const create = catchAsync(async (req: Request, res: Response) => {
-  const isExists = await countryService.findOne(req.body);
+  const isExists = await idTypeService.findOne(req.body);
 
   if (isExists) {
     throw new ApiError(
       httpStatus.CONFLICT,
-      `${req.body?.name} country name is already exists!`
+      `${req.body?.name} ID Type is already exists!`
     );
   }
 
-  const result = await countryService.insertIntoDB(req.body);
+  const result = await idTypeService.insertIntoDB(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Country Created Successfully!",
+    message: "ID Type Created Successfully!",
     data: result,
   });
 });
 
 const getAll = catchAsync(async (req: Request, res: Response) => {
   const paginationOptions = pick(req.query, paginationFields);
-  const filters = pick(req.query, countryFilterableFields);
-  const result = await countryService.findAll(paginationOptions, filters);
+  const filters = pick(req.query, idTypeFilterableFields);
+
+  const result = await idTypeService.findAll(paginationOptions, filters);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Countries Retrieved Successfully",
+    message: "ID Types Get Successfully",
     data: result?.data,
     meta: result?.meta,
   });
@@ -46,21 +47,21 @@ const getAll = catchAsync(async (req: Request, res: Response) => {
 const updateOne = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const isExists = await countryService.findOne(req.body);
+  const isExists = await idTypeService.findOne(req.body);
 
   if (isExists) {
     throw new ApiError(
       httpStatus.CONFLICT,
-      `${req.body.name} country name is already exists!`
+      `${req.body.name} ID Type is already exists!`
     );
   }
 
-  const result = await countryService.updateById(id, req.body);
+  const result = await idTypeService.updateById(id, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Country Update Successfully!",
+    message: "ID Type Update Successfully!",
     data: result,
   });
 });
@@ -68,31 +69,32 @@ const updateOne = catchAsync(async (req: Request, res: Response) => {
 const deleteOne = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const result = await countryService.deleteById(id);
+  const result = await idTypeService.deleteById(id);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Country Delete Successfully!",
+    message: "ID Types Delete Successfully!",
     data: result,
   });
 });
 
-const getAllCountries = catchAsync(async (req: Request, res: Response) => {
-  const result = await countryService.findAllCountry();
+const getAllIdTypes = catchAsync(async (req: Request, res: Response) => {
+  const { countryId } = req.params;
+  const result = await idTypeService.findAllType(countryId);
 
-  sendResponse<Country[]>(res, {
+  sendResponse<IDType[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Countries Get Successfully!",
+    message: "ID Types Get Successfully!",
     data: result,
   });
 });
 
-export const countryController = {
+export const idTypeController = {
   create,
   getAll,
   updateOne,
   deleteOne,
-  getAllCountries,
+  getAllIdTypes,
 };

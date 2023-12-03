@@ -6,19 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRoutes = void 0;
 const express_1 = __importDefault(require("express"));
 const auth_controller_1 = require("./auth.controller");
+const user_constants_1 = require("../user/user.constants");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
 const router = express_1.default.Router();
-router.route("/create-user").post(auth_controller_1.authController.userSignup);
-router.route("/login").post(auth_controller_1.authController.userSignin);
-router.route("/change-password").patch(
-// auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-auth_controller_1.authController.changePassword);
-router.route("/change-user-role").patch(
-// auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-auth_controller_1.authController.changeUserRole);
-router.route("/delete-user").patch(
-// auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-auth_controller_1.authController.deleteUser);
-router.route("/refresh-token").post(
-// auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-auth_controller_1.authController.getAccessToken);
+router.route("/refresh-token").post(auth_controller_1.authController.getAccessToken);
+router
+    .route("/create-user")
+    .post((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), auth_controller_1.authController.create);
+router.route("/login").post(auth_controller_1.authController.login);
 exports.authRoutes = router;

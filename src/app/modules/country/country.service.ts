@@ -102,10 +102,17 @@ const findOne = async (data: Country): Promise<Country | null> => {
   return result;
 };
 
+const findAllCountry = async (): Promise<Country[]> => {
+  const result = await prisma.country.findMany();
+
+  return result;
+};
+
 export const countryService = {
   insertIntoDB,
   findAll,
   updateById,
   deleteById,
   findOne,
+  findAllCountry,
 };

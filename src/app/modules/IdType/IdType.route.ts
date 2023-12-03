@@ -1,32 +1,32 @@
 import express from "express";
-import { countryController } from "./country.controller";
 import auth from "../../middlewares/auth";
 import { ENUM_USER_ROLE } from "../user/user.constants";
+import { idTypeController } from "./IdType.controller";
 
 const router = express.Router();
 
-router.route("/get-all").get(countryController.getAllCountries);
+router.route("/get-all/countryId").get(idTypeController.getAllIdTypes);
 
 router
   .route("/")
   .get(
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-    countryController.getAll
+    idTypeController.getAll
   )
   .post(
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-    countryController.create
+    idTypeController.create
   );
 
 router
   .route("/:id")
   .patch(
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-    countryController.updateOne
+    idTypeController.updateOne
   )
   .delete(
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-    countryController.deleteOne
+    idTypeController.deleteOne
   );
 
-export const countryRoutes = router;
+export const idTypeRoutes = router;

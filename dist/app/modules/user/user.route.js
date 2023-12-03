@@ -11,11 +11,9 @@ const user_constants_1 = require("./user.constants");
 const router = express_1.default.Router();
 router
     .route("/")
-    .get((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), user_controller_1.userController.getAllUser);
+    .get((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), user_controller_1.userController.getAll);
 router
-    .route("/update-info")
-    .patch((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN, user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.USER), user_controller_1.userController.updateUserInfo);
-router
-    .route("/get-profile")
-    .get((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.USER, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), user_controller_1.userController.getSingle);
+    .route("/:id")
+    .patch((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), user_controller_1.userController.updateOne)
+    .delete((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), user_controller_1.userController.deleteOne);
 exports.userRoutes = router;

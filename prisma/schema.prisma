@@ -21,14 +21,17 @@ enum Gender {
 }
 
 model Country {
-  id          String    @id @default(uuid())
-  name        String    @unique
-  countryCode String    @unique
-  postalCode  String    @unique
-  addresses   Address[]
+  id          String  @id @default(uuid())
+  name        String  @unique
+  countryCode String  @unique
+  postalCode  String  @unique
+  isActive    Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  addresses Address[]
+  idTypes   IDType[]
 
   @@map("countries")
 }
@@ -44,6 +47,18 @@ model Address {
   country Country @relation(fields: [countryId], references: [id])
 
   @@map("addresses")
+}
+
+model IDType {
+  id        String @id @default(uuid())
+  tittle    String @unique
+  countryId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  country   Country  @relation(fields: [countryId], references: [id])
+
+  @@map("id_types")
 }
 
 model User {
