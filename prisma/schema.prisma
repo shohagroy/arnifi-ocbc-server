@@ -52,7 +52,7 @@ model User {
   email     String   @unique
   password  String
   role      Role
-  contact   String?
+  contact   String
   gender    Gender?
   addressId String?  @unique
   address   Address? @relation(fields: [addressId], references: [id])

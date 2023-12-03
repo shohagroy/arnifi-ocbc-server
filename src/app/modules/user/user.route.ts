@@ -1,29 +1,13 @@
 import express from "express";
 import { userController } from "./user.controller";
-import auth from "../../middlewares/auth";
-import { ENUM_USER_ROLE } from "./user.constants";
 
 const router = express.Router();
 
-router
-  .route("/")
-  .get(
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-    userController.getAllUser
-  );
+router.route("/").get(userController.getAll);
 
 router
-  .route("/update-info")
-  .patch(
-    auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    userController.updateUserInfo
-  );
-
-router
-  .route("/get-profile")
-  .get(
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER, ENUM_USER_ROLE.SUPER_ADMIN),
-    userController.getSingle
-  );
+  .route("/:id")
+  .patch(userController.updateOne)
+  .delete(userController.deleteOne);
 
 export const userRoutes = router;

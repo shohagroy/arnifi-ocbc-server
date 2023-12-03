@@ -1,65 +1,56 @@
 import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
-import { userService } from "./user.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
-import { User } from "@prisma/client";
-import pick from "../../../shared/pick";
 import { paginationFields } from "../../../constants/pagination";
 import { userFilterableFields } from "./user.constants";
-import { JwtPayload } from "jsonwebtoken";
+import pick from "../../../shared/pick";
+import ApiError from "../../../errors/ApiError";
+import { userService } from "./user.service";
 
-const getAllUser = catchAsync(async (req: Request, res: Response) => {
+const getAll = catchAsync(async (req: Request, res: Response) => {
   const paginationOptions = pick(req.query, paginationFields);
   const filters = pick(req.query, userFilterableFields);
 
-  const result = await userService.getAllUserToDb(paginationOptions, filters);
+  const result = await userService.findAll(paginationOptions, filters);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "users retrieved successfully",
-    data: result,
+    message: "Users Retrieved Successfully",
+    data: result?.data,
+    meta: result?.meta,
   });
 });
 
-const getSingle = catchAsync(async (req: Request, res: Response) => {
-  const { id }: JwtPayload = req.user!;
-  const result = await userService.getSingleUserToDb(id);
-  sendResponse<Partial<User>>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "User retrieved Successfully!",
-    data: result,
-  });
-});
-
-const updateUserInfo = catchAsync(async (req: Request, res: Response) => {
-  const { id }: JwtPayload = req.user!;
-  const updatedData = req.body;
-
-  const result = await userService.updateUserDataToDb(id, updatedData);
-  sendResponse<Partial<User>>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "User Updated Successfully!",
-    data: result,
-  });
-});
-
-const deleteUser = catchAsync(async (req: Request, res: Response) => {
+const updateOne = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await userService.deleteUserToDb(id);
-  sendResponse<Partial<User>>(res, {
+
+  const result = await userService.updateById(id, req.body);
+
+  sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "user deleted successfully",
+    message: "User Update Successfully!",
+    data: result,
+  });
+});
+
+const deleteOne = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const result = await userService.deleteById(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User Delete Successfully!",
     data: result,
   });
 });
 
 export const userController = {
-  getAllUser,
-  getSingle,
-  updateUserInfo,
-  deleteUser,
+  getAll,
+  updateOne,
+  deleteOne,
 };

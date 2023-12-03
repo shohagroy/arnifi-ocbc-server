@@ -10,112 +10,102 @@ import envconfig from "../../../config/envconfig";
 import { ENUM_USER_ROLE } from "../user/user.constants";
 import { IChangePassword } from "./auth.constans";
 
-const createNewUser = async (payload: User) => {
-  const isUserExists = await userService.findByEmail(payload.email);
-
-  if (isUserExists) {
-    throw new ApiError(httpStatus.CONFLICT, "User Already Exists!");
-  }
-
+const create = async (payload: User) => {
   payload.password = await hashedPassword.createhas(payload.password!);
-  payload.role = Role.admin;
 
-  const newUser = await userService.insertUserToDB(payload);
+  const result = await userService.insertIntoDB(payload);
 
-  const refreshToken = await jwtHelpers.createToken(
-    newUser,
-    envconfig.refreshToken_expires!
-  );
-  const accessToken = await jwtHelpers.createToken(
-    newUser,
-    envconfig.expires_in!
-  );
-
-  return { refreshToken, accessToken };
-};
-
-const userSignin = async (payload: Partial<User>) => {
-  const { email, password } = payload;
-  const isUserExists = await userService.findByEmail(email!);
-
-  if (!isUserExists) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User does not exists!");
-  }
-
-  const isPasswordMatched = await hashedPassword.comparePassword(
-    password!,
-    isUserExists.password
-  );
-
-  if (!isPasswordMatched) {
-    throw new ApiError(httpStatus.FORBIDDEN, "Password does not match!");
-  }
-
-  const refreshToken = await jwtHelpers.createToken(
-    isUserExists,
-    envconfig.refreshToken_expires!
-  );
-  const accessToken = await jwtHelpers.createToken(
-    isUserExists,
-    envconfig.expires_in!
-  );
-
-  return { refreshToken, accessToken };
-};
-
-const changePassword = async (email: string, payload: IChangePassword) => {
-  const { newPassword, oldPassword } = payload;
-  const isUserExists = await userService.findByEmail(email!);
-
-  if (!isUserExists) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User does not exists!");
-  }
-
-  const isPasswordMatched = await hashedPassword.comparePassword(
-    oldPassword!,
-    isUserExists.password
-  );
-
-  if (!isPasswordMatched) {
-    throw new ApiError(httpStatus.FORBIDDEN, "Password does not match!");
-  }
-  const password = await hashedPassword.createhas(newPassword);
-
-  const result = await userService.updateUserDataToDb(isUserExists.id, {
-    password,
-  });
-
+  result.password = "";
   return result;
+
+  // const refreshToken = await jwtHelpers.createToken(
+  //   newUser,
+  //   envconfig.refreshToken_expires!
+  // );
+  // const accessToken = await jwtHelpers.createToken(
+  //   newUser,
+  //   envconfig.expires_in!
+  // );
+
+  // return { refreshToken, accessToken };
 };
 
-const getProfile = async (id: string) => {
-  const result = await userService.getSingleUserToDb(id);
+// const userSignin = async (payload: Partial<User>) => {
+//   const { email, password } = payload;
+//   const isUserExists = await userService.findByEmail(email!);
 
-  return result;
-};
+//   if (!isUserExists) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "User does not exists!");
+//   }
 
-const createAccessToken = async (id: string) => {
-  const result = await userService.getSingleUserToDb(id);
+//   const isPasswordMatched = await hashedPassword.comparePassword(
+//     password!,
+//     isUserExists.password
+//   );
 
-  return result;
-};
+//   if (!isPasswordMatched) {
+//     throw new ApiError(httpStatus.FORBIDDEN, "Password does not match!");
+//   }
 
-const changeUserRole = async (id: string, role: Partial<User>) => {
-  const result = await userService.updateUserDataToDb(id, role);
-  return result;
-};
+//   const refreshToken = await jwtHelpers.createToken(
+//     isUserExists,
+//     envconfig.refreshToken_expires!
+//   );
+//   const accessToken = await jwtHelpers.createToken(
+//     isUserExists,
+//     envconfig.expires_in!
+//   );
 
-const deleteUser = async (id: string) => {
-  const result = await userService.deleteUserToDb(id);
-  return result;
-};
+//   return { refreshToken, accessToken };
+// };
+
+// const changePassword = async (email: string, payload: IChangePassword) => {
+//   const { newPassword, oldPassword } = payload;
+//   const isUserExists = await userService.findByEmail(email!);
+
+//   if (!isUserExists) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "User does not exists!");
+//   }
+
+//   const isPasswordMatched = await hashedPassword.comparePassword(
+//     oldPassword!,
+//     isUserExists.password
+//   );
+
+//   if (!isPasswordMatched) {
+//     throw new ApiError(httpStatus.FORBIDDEN, "Password does not match!");
+//   }
+//   const password = await hashedPassword.createhas(newPassword);
+
+//   const result = await userService.updateUserDataToDb(isUserExists.id, {
+//     password,
+//   });
+
+//   return result;
+// };
+
+// const getProfile = async (id: string) => {
+//   const result = await userService.getSingleUserToDb(id);
+
+//   return result;
+// };
+
+// const createAccessToken = async (id: string) => {
+//   const result = await userService.getSingleUserToDb(id);
+
+//   return result;
+// };
+
+// const changeUserRole = async (id: string, role: Partial<User>) => {
+//   const result = await userService.updateUserDataToDb(id, role);
+//   return result;
+// };
+
+// const deleteUser = async (id: string) => {
+//   const result = await userService.deleteUserToDb(id);
+//   return result;
+// };
 
 export const authService = {
-  createNewUser,
-  userSignin,
-  getProfile,
-  createAccessToken,
-  changePassword,
-  changeUserRole,
-  deleteUser,
+  create,
 };

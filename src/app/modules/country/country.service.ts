@@ -13,7 +13,7 @@ const insertIntoDB = async (data: Country): Promise<Country> => {
   return result;
 };
 
-const findALl = async (
+const findAll = async (
   paginationOptions: IPaginationOptions,
   filters: ICountryFilters
 ) => {
@@ -104,7 +104,7 @@ const findOne = async (data: Country): Promise<Country | null> => {
 
 export const countryService = {
   insertIntoDB,
-  findALl,
+  findAll,
   updateById,
   deleteById,
   findOne,

@@ -1,4 +1,3 @@
-export type IUserFilters = {
+export type ICountryFilters = {
   search?: string;
-  role?: string;
 };

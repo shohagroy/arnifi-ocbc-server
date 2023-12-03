@@ -31,7 +31,7 @@ const create = catchAsync(async (req: Request, res: Response) => {
 const getAll = catchAsync(async (req: Request, res: Response) => {
   const paginationOptions = pick(req.query, paginationFields);
   const filters = pick(req.query, countryFilterableFields);
-  const result = await countryService.findALl(paginationOptions, filters);
+  const result = await countryService.findAll(paginationOptions, filters);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -1,9 +1,7 @@
+export const userFilterableFields: string[] = ["search"];
+export const userSearchableFields: string[] = ["fullName", "contact", "email"];
+
 export enum ENUM_USER_ROLE {
-  SUPER_ADMIN = "super_admin",
   ADMIN = "admin",
-  USER = "user",
+  SUPER_ADMIN = "super_admin",
 }
-
-export const userFilterableFields: string[] = ["search", "role"];
-
-export const userSearchableFields: string[] = ["name", "email", "contact"];
