@@ -96,6 +96,7 @@ const getAccessToken = catchAsync(async (req: Request, res: Response) => {
   }
 
   const accessToken = await jwtHelpers.createToken(user, envconfig.expires_in!);
+  req.headers.Authorization = accessToken;
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
