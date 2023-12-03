@@ -6,6 +6,7 @@ import auth from "../../middlewares/auth";
 const router = express.Router();
 
 router.route("/create-user").post(authController.create);
+router.route("/login").post(authController.login);
 
 // router.route("/login").post(authController.userSignin);
 // router.route("/change-password").patch(

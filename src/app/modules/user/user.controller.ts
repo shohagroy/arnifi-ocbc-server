@@ -5,7 +5,6 @@ import httpStatus from "http-status";
 import { paginationFields } from "../../../constants/pagination";
 import { userFilterableFields } from "./user.constants";
 import pick from "../../../shared/pick";
-import ApiError from "../../../errors/ApiError";
 import { userService } from "./user.service";
 
 const getAll = catchAsync(async (req: Request, res: Response) => {

@@ -17,17 +17,6 @@ const create = async (payload: User) => {
 
   result.password = "";
   return result;
-
-  // const refreshToken = await jwtHelpers.createToken(
-  //   newUser,
-  //   envconfig.refreshToken_expires!
-  // );
-  // const accessToken = await jwtHelpers.createToken(
-  //   newUser,
-  //   envconfig.expires_in!
-  // );
-
-  // return { refreshToken, accessToken };
 };
 
 // const userSignin = async (payload: Partial<User>) => {

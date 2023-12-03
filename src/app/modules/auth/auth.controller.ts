@@ -9,6 +9,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { jwtHelpers } from "../../../utils/jwtHelpers";
 import ApiError from "../../../errors/ApiError";
 import { userService } from "../user/user.service";
+import { hashedPassword } from "../../../utils/hashedPassword";
 
 const create = catchAsync(async (req: Request, res: Response) => {
   const { password, repassword, email, ...other } = req.body;
@@ -38,28 +39,47 @@ const create = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// const userSignin = catchAsync(async (req: Request, res: Response) => {
-//   const result = await authService.userSignin(req.body);
+const login = catchAsync(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
 
-//   const { refreshToken, accessToken } = result;
+  const isExists = await userService.findOne(email);
 
-//   const cookieOptions = {
-//     secure: envconfig.node_env === "production",
-//     httpOnly: true,
-//   };
+  if (!isExists) {
+    throw new ApiError(httpStatus.NOT_FOUND, `User does not exists!`);
+  }
 
-//   res.cookie("refreshToken", refreshToken, cookieOptions);
+  const isPasswordMatched = await hashedPassword.comparePassword(
+    password!,
+    isExists.password
+  );
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "User Login Successufully!",
-//     data: {
-//       accessToken,
-//       refreshToken,
-//     },
-//   });
-// });
+  if (!isPasswordMatched) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Password does not match!");
+  }
+
+  const refreshToken = await jwtHelpers.createToken(
+    isExists,
+    envconfig.refreshToken_expires!
+  );
+  const accessToken = await jwtHelpers.createToken(
+    isExists,
+    envconfig.expires_in!
+  );
+
+  const cookieOptions = {
+    secure: envconfig.node_env === "production",
+    httpOnly: true,
+  };
+
+  res.cookie("refreshToken", refreshToken, cookieOptions);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User Log In Successufully!",
+    data: accessToken,
+  });
+});
 
 // const getProfile = catchAsync(async (req: Request, res: Response) => {
 //   const user: Partial<User> = req.user as Partial<User>;
@@ -121,4 +141,5 @@ const create = catchAsync(async (req: Request, res: Response) => {
 
 export const authController = {
   create,
+  login,
 };
