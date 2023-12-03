@@ -14,7 +14,6 @@ const create = async (payload: User) => {
   payload.password = await hashedPassword.createhas(payload.password!);
 
   const result = await userService.insertIntoDB(payload);
-
   result.password = "";
   return result;
 };
@@ -79,11 +78,18 @@ const create = async (payload: User) => {
 //   return result;
 // };
 
-// const createAccessToken = async (id: string) => {
-//   const result = await userService.getSingleUserToDb(id);
+const createAccessToken = async (email: string) => {
+  const result = await userService.findOne(email);
 
-//   return result;
-// };
+  console.log(result);
+
+  // const accessToken = await jwtHelpers.createToken(
+  //   result,
+  //   envconfig.expires_in!
+  // );
+
+  return result;
+};
 
 // const changeUserRole = async (id: string, role: Partial<User>) => {
 //   const result = await userService.updateUserDataToDb(id, role);
@@ -97,4 +103,5 @@ const create = async (payload: User) => {
 
 export const authService = {
   create,
+  createAccessToken,
 };

@@ -3,9 +3,8 @@ import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import { authService } from "./auth.service";
-import { User } from "@prisma/client";
 import envconfig from "../../../config/envconfig";
-import { JwtPayload } from "jsonwebtoken";
+import { Secret } from "jsonwebtoken";
 import { jwtHelpers } from "../../../utils/jwtHelpers";
 import ApiError from "../../../errors/ApiError";
 import { userService } from "../user/user.service";
@@ -57,13 +56,14 @@ const login = catchAsync(async (req: Request, res: Response) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Password does not match!");
   }
 
-  const refreshToken = await jwtHelpers.createToken(
-    isExists,
-    envconfig.refreshToken_expires!
-  );
   const accessToken = await jwtHelpers.createToken(
     isExists,
     envconfig.expires_in!
+  );
+
+  const refreshToken = await jwtHelpers.createToken(
+    isExists,
+    envconfig.refreshToken_expires!
   );
 
   const cookieOptions = {
@@ -77,43 +77,33 @@ const login = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "User Log In Successufully!",
-    data: accessToken,
+    data: { accessToken },
   });
 });
 
-// const getProfile = catchAsync(async (req: Request, res: Response) => {
-//   const user: Partial<User> = req.user as Partial<User>;
-//   const result = await authService.getProfile(user.id!);
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "user received successufully",
-//     data: result,
-//   });
-// });
+const getAccessToken = catchAsync(async (req: Request, res: Response) => {
+  const token = req.cookies.refreshToken;
 
-// const changePassword = catchAsync(async (req: Request, res: Response) => {
-//   const { email }: JwtPayload = req.user!;
-//   const result = await authService.changePassword(email, req.body);
+  const validate = jwtHelpers.verifyToken(
+    token,
+    envconfig.secrect_token_key as Secret
+  );
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Password Change Successufully!",
-//     data: result,
-//   });
-// });
+  const user = await userService.findOne(validate?.email!);
 
-// const getAccessToken = catchAsync(async (req: Request, res: Response) => {
-//   // const user: Partial<User> = req.user as Partial<User>;
-//   // const result = await authService.createAccessToken(user.id!);
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Access Token Get successufully",
-//     // data: result,
-//   });
-// });
+  if (!user) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized");
+  }
+
+  const accessToken = await jwtHelpers.createToken(user, envconfig.expires_in!);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Access Token Get successufully",
+    data: { accessToken },
+  });
+});
 
 // const changeUserRole = catchAsync(async (req: Request, res: Response) => {
 //   const { id, ...other } = req.body;
@@ -142,4 +132,5 @@ const login = catchAsync(async (req: Request, res: Response) => {
 export const authController = {
   create,
   login,
+  getAccessToken,
 };
