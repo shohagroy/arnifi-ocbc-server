@@ -80,6 +80,7 @@ const deleteOne = catchAsync(async (req: Request, res: Response) => {
 
 const getAllStepTypes = catchAsync(async (req: Request, res: Response) => {
   const { countryId, stepId } = req.params;
+
   const result = await stepFildService.findStepFilds(countryId, stepId);
 
   sendResponse<StepFild[]>(res, {

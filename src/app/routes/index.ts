@@ -4,6 +4,7 @@ import { userRoutes } from "../modules/user/user.route";
 import { countryRoutes } from "../modules/country/country.route";
 import { idTypeRoutes } from "../modules/IdType/IdType.route";
 import { stepFildRoutes } from "../modules/stepId/stepId.route";
+import { formStepRoutes } from "../modules/formStep/formStep.route";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -22,6 +23,10 @@ const moduleRoutes = [
   {
     path: "/idTypes",
     route: idTypeRoutes,
+  },
+  {
+    path: "/form-step",
+    route: formStepRoutes,
   },
   {
     path: "/step-filds",
