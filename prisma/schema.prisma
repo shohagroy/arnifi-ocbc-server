@@ -67,6 +67,23 @@ model IDType {
   @@map("id_types")
 }
 
+model StepFild {
+  id          String  @id @default(uuid())
+  name        String
+  label       String
+  placeholder String
+  type        String
+  errorText   String?
+  countryId   String
+  stepId      String
+  isRequired  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("step_filds")
+}
+
 model User {
   id        String   @id @default(uuid())
   fullName  String

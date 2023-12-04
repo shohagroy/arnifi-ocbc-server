@@ -8,6 +8,7 @@ const auth_route_1 = require("../modules/auth/auth.route");
 const user_route_1 = require("../modules/user/user.route");
 const country_route_1 = require("../modules/country/country.route");
 const IdType_route_1 = require("../modules/IdType/IdType.route");
+const stepId_route_1 = require("../modules/stepId/stepId.route");
 const router = express_1.default.Router();
 const moduleRoutes = [
     {
@@ -25,6 +26,10 @@ const moduleRoutes = [
     {
         path: "/idTypes",
         route: IdType_route_1.idTypeRoutes,
+    },
+    {
+        path: "/step-filds",
+        route: stepId_route_1.stepFildRoutes,
     },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
