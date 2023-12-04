@@ -50,11 +50,13 @@ const findAll = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0
     if (Object.keys(filterData).length > 0) {
         andConditions.push({
             AND: Object.keys(filterData).map((key) => {
-                return {
-                    [key]: {
-                        equals: filterData[key],
-                    },
-                };
+                if (key === "countryId") {
+                    return {
+                        [key]: {
+                            equals: filterData[key],
+                        },
+                    };
+                }
             }),
         });
     }
