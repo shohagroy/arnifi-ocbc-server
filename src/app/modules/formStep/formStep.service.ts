@@ -116,10 +116,14 @@ const findOne = async (payload: FormStep): Promise<FormStep | null> => {
   return result;
 };
 
-const findCountryFromSteps = async (countryId: string): Promise<FormStep[]> => {
+const findCountryFromSteps = async (
+  countryId: string,
+  value: string
+): Promise<FormStep[]> => {
   const result = await prisma.formStep.findMany({
     where: {
       countryId,
+      value,
     },
     include: {
       stepFilds: {
