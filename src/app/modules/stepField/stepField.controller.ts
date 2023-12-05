@@ -6,7 +6,7 @@ import { paginationFields } from "../../../constants/pagination";
 import pick from "../../../shared/pick";
 import ApiError from "../../../errors/ApiError";
 import { IDType, StepFild } from "@prisma/client";
-import { stepFildService } from "./stepId.service";
+import { stepFildService } from "./stepField.service";
 
 const create = catchAsync(async (req: Request, res: Response) => {
   const isExists = await stepFildService.findOne(req.body);
@@ -14,7 +14,7 @@ const create = catchAsync(async (req: Request, res: Response) => {
   if (isExists) {
     throw new ApiError(
       httpStatus.CONFLICT,
-      `${req.body?.name} Step Fild is already exists!`
+      `${req.body?.label} Step Fild is already exists!`
     );
   }
 
@@ -46,14 +46,16 @@ const create = catchAsync(async (req: Request, res: Response) => {
 const updateOne = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const isExists = await stepFildService.findOne(req.body);
+  // const isExists = await stepFildService.findOne(req.body);
 
-  if (isExists) {
-    throw new ApiError(
-      httpStatus.CONFLICT,
-      `${req.body.name} ID Type is already exists!`
-    );
-  }
+  // console.log(isExists);
+
+  // if (isExists) {
+  //   throw new ApiError(
+  //     httpStatus.CONFLICT,
+  //     `${req.body.label} Step Fild is already exists!`
+  //   );
+  // }
 
   const result = await stepFildService.updateById(id, req.body);
 

@@ -5,16 +5,16 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
-
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
+
+// datasource db {
+//   provider  = "postgresql"
+//   url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+//   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+// }
 
 enum Role {
   super_admin
@@ -39,6 +39,7 @@ model Country {
   addresses Address[]
   idTypes   IDType[]
   formSteps FormStep[]
+  stepFilds StepFild[]
 
   @@map("countries")
 }
@@ -73,9 +74,10 @@ model FormStep {
   tittle    String
   countryId String?
 
-  country   Country? @relation(fields: [countryId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  country   Country?   @relation(fields: [countryId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  stepFilds StepFild[]
 
   @@map("form_steps")
 }
@@ -90,6 +92,9 @@ model StepFild {
   countryId   String
   stepId      String
   isRequired  Boolean @default(false)
+
+  country  Country  @relation(fields: [countryId], references: [id])
+  formStep FormStep @relation(fields: [stepId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

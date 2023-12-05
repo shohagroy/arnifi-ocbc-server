@@ -1,13 +1,22 @@
 import { IDType, Prisma, StepFild } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import { IPaginationOptions } from "../../../interfaces/pagination";
-import { IIDTypeFilters } from "./stepId.interface";
+import { IIDTypeFilters } from "./stepField.interface";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
-import { idTypeSearchableFields } from "./stepId.constants";
+import { idTypeSearchableFields } from "./stepField.constants";
 
 const insertIntoDB = async (data: StepFild): Promise<StepFild> => {
   const result = await prisma.stepFild.create({
-    data,
+    data: {
+      name: data.name,
+      label: data.label,
+      placeholder: data.placeholder,
+      errorText: data.errorText,
+      type: data.type,
+      stepId: data.stepId,
+      countryId: data.countryId,
+      isRequired: data.isRequired,
+    },
   });
 
   return result;
@@ -94,6 +103,7 @@ const updateById = async (
       type: payload.type,
       stepId: payload.stepId,
       countryId: payload.countryId,
+      isRequired: payload.isRequired,
     },
   });
 

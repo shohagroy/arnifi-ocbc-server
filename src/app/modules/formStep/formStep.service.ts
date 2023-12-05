@@ -121,8 +121,15 @@ const findCountryFromSteps = async (countryId: string): Promise<FormStep[]> => {
     where: {
       countryId,
     },
+    include: {
+      stepFilds: {
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+    },
     orderBy: {
-      tittle: "asc",
+      createdAt: "asc",
     },
   });
 
