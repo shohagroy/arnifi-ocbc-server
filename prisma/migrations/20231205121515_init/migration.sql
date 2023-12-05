@@ -40,6 +40,34 @@ CREATE TABLE "id_types" (
 );
 
 -- CreateTable
+CREATE TABLE "form_steps" (
+    "id" TEXT NOT NULL,
+    "tittle" TEXT NOT NULL,
+    "countryId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "form_steps_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "step_filds" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "label" TEXT NOT NULL,
+    "placeholder" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "errorText" TEXT,
+    "countryId" TEXT NOT NULL,
+    "stepId" TEXT NOT NULL,
+    "isRequired" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "step_filds_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "fullName" TEXT NOT NULL,
@@ -78,6 +106,15 @@ ALTER TABLE "addresses" ADD CONSTRAINT "addresses_countryId_fkey" FOREIGN KEY ("
 
 -- AddForeignKey
 ALTER TABLE "id_types" ADD CONSTRAINT "id_types_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "countries"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "form_steps" ADD CONSTRAINT "form_steps_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "countries"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "step_filds" ADD CONSTRAINT "step_filds_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "countries"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "step_filds" ADD CONSTRAINT "step_filds_stepId_fkey" FOREIGN KEY ("stepId") REFERENCES "form_steps"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "addresses"("id") ON DELETE SET NULL ON UPDATE CASCADE;

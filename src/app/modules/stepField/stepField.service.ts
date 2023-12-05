@@ -13,7 +13,7 @@ const insertIntoDB = async (data: StepFild): Promise<StepFild> => {
       placeholder: data.placeholder,
       errorText: data.errorText,
       type: data.type,
-      stepId: data.stepId,
+      stepValue: data.stepValue,
       countryId: data.countryId,
       isRequired: data.isRequired,
     },
@@ -101,7 +101,7 @@ const updateById = async (
       placeholder: payload.placeholder,
       errorText: payload.errorText,
       type: payload.type,
-      stepId: payload.stepId,
+      stepValue: payload.stepValue,
       countryId: payload.countryId,
       isRequired: payload.isRequired,
     },
@@ -126,7 +126,7 @@ const findOne = async (payload: StepFild): Promise<StepFild | null> => {
       name: payload.name,
       type: payload.type,
       countryId: payload.countryId,
-      stepId: payload.stepId,
+      stepValue: payload.stepValue,
     },
   });
 
@@ -140,7 +140,6 @@ const findStepFilds = async (
   const result = await prisma.stepFild.findMany({
     where: {
       countryId,
-      stepId,
     },
     orderBy: {
       createdAt: "asc",

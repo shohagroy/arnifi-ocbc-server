@@ -23,12 +23,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.countryService = void 0;
+exports.formStepService = void 0;
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
-const country_constants_1 = require("./country.constants");
+const formStep_constants_1 = require("./formStep.constants");
 const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.country.create({
+    const result = yield prisma_1.default.formStep.create({
         data,
     });
     return result;
@@ -39,7 +39,7 @@ const findAll = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0
     const andConditions = [];
     if (search) {
         andConditions.push({
-            OR: country_constants_1.countrySearchableFields.map((field) => ({
+            OR: formStep_constants_1.formStepSearchableFields.map((field) => ({
                 [field]: {
                     contains: search,
                     mode: "insensitive",
@@ -47,19 +47,34 @@ const findAll = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0
             })),
         });
     }
+    if (Object.keys(filterData).length > 0) {
+        andConditions.push({
+            AND: Object.keys(filterData).map((key) => {
+                if (key === "countryId") {
+                    return {
+                        [key]: {
+                            equals: filterData[key],
+                        },
+                    };
+                }
+            }),
+        });
+    }
     const whereConditions = andConditions.length > 0 ? { AND: andConditions } : {};
-    const result = yield prisma_1.default.country.findMany({
+    const result = yield prisma_1.default.formStep.findMany({
         where: whereConditions,
-        include: {},
+        include: {
+            country: true,
+        },
         skip,
         take: size,
         orderBy: paginationOptions.sortBy && paginationOptions.sortOrder
             ? { [paginationOptions.sortBy]: paginationOptions.sortOrder }
             : {
-                name: "asc",
+                tittle: "asc",
             },
     });
-    const total = yield prisma_1.default.country.count({
+    const total = yield prisma_1.default.formStep.count({
         where: whereConditions,
     });
     return {
@@ -72,48 +87,55 @@ const findAll = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0
     };
 });
 const updateById = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.country.update({
+    const result = yield prisma_1.default.formStep.update({
         where: { id },
         data: {
-            name: payload.name,
-            postalCode: payload.postalCode,
-            countryCode: payload.countryCode,
+            tittle: payload.tittle,
+            countryId: payload.countryId,
         },
     });
     return result;
 });
 const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.country.delete({
+    const result = yield prisma_1.default.formStep.delete({
         where: {
             id,
         },
     });
     return result;
 });
-const findOne = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.country.findUnique({
+const findOne = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.formStep.findFirst({
         where: {
-            name: data.name,
-            postalCode: data.postalCode,
-            countryCode: data.countryCode,
+            tittle: payload.tittle,
+            countryId: payload.countryId,
         },
     });
     return result;
 });
-const findAllCountry = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.country.findMany({
+const findCountryFromSteps = (countryId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.formStep.findMany({
+        where: {
+            countryId,
+        },
         include: {
-            idTypes: true,
-            formSteps: true,
+            stepFilds: {
+                orderBy: {
+                    createdAt: "asc",
+                },
+            },
+        },
+        orderBy: {
+            createdAt: "asc",
         },
     });
     return result;
 });
-exports.countryService = {
+exports.formStepService = {
     insertIntoDB,
     findAll,
     updateById,
     deleteById,
     findOne,
-    findAllCountry,
+    findCountryFromSteps,
 };

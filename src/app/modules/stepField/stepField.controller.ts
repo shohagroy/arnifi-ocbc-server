@@ -2,10 +2,8 @@ import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
-import { paginationFields } from "../../../constants/pagination";
-import pick from "../../../shared/pick";
 import ApiError from "../../../errors/ApiError";
-import { IDType, StepFild } from "@prisma/client";
+import { StepFild } from "@prisma/client";
 import { stepFildService } from "./stepField.service";
 
 const create = catchAsync(async (req: Request, res: Response) => {
@@ -14,7 +12,7 @@ const create = catchAsync(async (req: Request, res: Response) => {
   if (isExists) {
     throw new ApiError(
       httpStatus.CONFLICT,
-      `${req.body?.label} Step Fild is already exists!`
+      `${req.body?.label} Step Fields is already exists!`
     );
   }
 
@@ -23,7 +21,7 @@ const create = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Stpe Fild Created Successfully!",
+    message: "Stpe Fields Created Successfully!",
     data: result,
   });
 });
@@ -62,7 +60,7 @@ const updateOne = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Step Fild Update Successfully!",
+    message: "Step Fields Update Successfully!",
     data: result,
   });
 });
@@ -75,7 +73,7 @@ const deleteOne = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Step Fild Delete Successfully!",
+    message: "Step Fields Delete Successfully!",
     data: result,
   });
 });
@@ -88,7 +86,7 @@ const getAllStepTypes = catchAsync(async (req: Request, res: Response) => {
   sendResponse<StepFild[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Step Filds Get Successfully!",
+    message: "Step Fields Get Successfully!",
     data: result,
   });
 });

@@ -108,6 +108,9 @@ const findAllCountry = async (): Promise<Country[]> => {
       idTypes: true,
       formSteps: true,
     },
+    orderBy: {
+      name: "asc",
+    },
   });
 
   return result;
