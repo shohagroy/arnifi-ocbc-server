@@ -106,11 +106,53 @@ const findAllCountry = async (): Promise<Country[]> => {
   const result = await prisma.country.findMany({
     include: {
       idTypes: true,
-      formSteps: true,
     },
     orderBy: {
       name: "asc",
     },
+  });
+
+  return result;
+};
+
+const findCountriesWill = async (): Promise<Country[]> => {
+  const result = await prisma.country.findMany({
+    where: {
+      stepFilds: {
+        some: {},
+      },
+    },
+    include: {
+      stepFilds: true,
+    },
+
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return result;
+};
+
+const activeStatus = async (id: string): Promise<Country> => {
+  const result = await prisma.$transaction(async (transactionClient) => {
+    await transactionClient.country.updateMany({
+      where: {
+        isActive: true,
+      },
+      data: {
+        isActive: false,
+      },
+    });
+
+    return await transactionClient.country.update({
+      where: {
+        id,
+      },
+      data: {
+        isActive: true,
+      },
+    });
   });
 
   return result;
@@ -123,4 +165,6 @@ export const countryService = {
   deleteById,
   findOne,
   findAllCountry,
+  findCountriesWill,
+  activeStatus,
 };

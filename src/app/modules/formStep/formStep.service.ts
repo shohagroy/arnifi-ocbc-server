@@ -6,6 +6,7 @@ import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { formStepSearchableFields } from "./formStep.constants";
 
 const insertIntoDB = async (data: FormStep): Promise<FormStep> => {
+  // console.log(data);
   const result = await prisma.formStep.create({
     data,
   });
@@ -34,19 +35,19 @@ const findAll = async (
     });
   }
 
-  if (Object.keys(filterData).length > 0) {
-    andConditions.push({
-      AND: Object.keys(filterData).map((key) => {
-        if (key === "countryId") {
-          return {
-            [key]: {
-              equals: filterData[key],
-            },
-          };
-        }
-      }),
-    });
-  }
+  // if (Object.keys(filterData).length > 0) {
+  //   andConditions.push({
+  //     AND: Object.keys(filterData).map((key) => {
+  //       if (key === "countryId") {
+  //         return {
+  //           [key]: {
+  //             equals: filterData[key],
+  //           },
+  //         };
+  //       }
+  //     }),
+  //   });
+  // }
 
   const whereConditions: Prisma.FormStepWhereInput | {} =
     andConditions.length > 0 ? { AND: andConditions } : {};
@@ -54,7 +55,7 @@ const findAll = async (
   const result = await prisma.formStep.findMany({
     where: whereConditions,
     include: {
-      country: true,
+      stepFilds: true,
     },
     skip,
     take: size,
@@ -88,7 +89,7 @@ const updateById = async (
     where: { id },
     data: {
       tittle: payload.tittle,
-      countryId: payload.countryId,
+      // countryId: payload.countryId,
     },
   });
 
@@ -109,7 +110,8 @@ const findOne = async (payload: FormStep): Promise<FormStep | null> => {
   const result = await prisma.formStep.findFirst({
     where: {
       tittle: payload.tittle,
-      countryId: payload.countryId,
+      // countryId: payload.countryId,
+      value: payload.value,
     },
   });
 
@@ -122,7 +124,7 @@ const findCountryFromSteps = async (
 ): Promise<FormStep[]> => {
   const result = await prisma.formStep.findMany({
     where: {
-      countryId,
+      // countryId,
       value,
     },
     include: {

@@ -38,10 +38,28 @@ model Country {
 
   addresses Address[]
   idTypes   IDType[]
-  formSteps FormStep[]
+  // formStep  FormStep[] // Define the one-to-one relation
+
+  // formSteps FormStep[]
   stepFilds StepFild[]
 
   @@map("countries")
+}
+
+model FormStep {
+  id     String @id @default(uuid())
+  tittle String
+  value  String @unique
+  // countryId String?
+
+  // country   Country?   @relation(fields: [countryId], references: [id])
+  // country Country? @relation(fields: [countryId], references: [id])
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  stepFilds StepFild[]
+
+  @@map("form_steps")
 }
 
 model Address {
@@ -67,20 +85,6 @@ model IDType {
   country   Country  @relation(fields: [countryId], references: [id])
 
   @@map("id_types")
-}
-
-model FormStep {
-  id        String  @id @default(uuid())
-  tittle    String
-  value     String  @unique
-  countryId String?
-
-  country   Country?   @relation(fields: [countryId], references: [id])
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  stepFilds StepFild[]
-
-  @@map("form_steps")
 }
 
 model StepFild {

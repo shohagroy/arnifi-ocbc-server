@@ -45,7 +45,6 @@ const getAll = catchAsync(async (req: Request, res: Response) => {
 
 const updateOne = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-
   const isExists = await countryService.findOne(req.body);
 
   if (isExists) {
@@ -61,6 +60,19 @@ const updateOne = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Country Update Successfully!",
+    data: result,
+  });
+});
+
+const changeWillStatus = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const result = await countryService.activeStatus(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Wills Status Update Successfully!",
     data: result,
   });
 });
@@ -89,10 +101,23 @@ const getAllCountries = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllCountriesWills = catchAsync(async (req: Request, res: Response) => {
+  const result = await countryService.findCountriesWill();
+
+  sendResponse<Country[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Countries Will Get Successfully!",
+    data: result,
+  });
+});
+
 export const countryController = {
   create,
   getAll,
   updateOne,
   deleteOne,
   getAllCountries,
+  getAllCountriesWills,
+  changeWillStatus,
 };
