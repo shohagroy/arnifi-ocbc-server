@@ -158,6 +158,20 @@ const activeStatus = async (id: string): Promise<Country> => {
   return result;
 };
 
+const findActiveCountryWill = async (): Promise<Country | null> => {
+  const result = await prisma.country.findFirst({
+    where: {
+      isActive: true,
+    },
+    include: {
+      stepFilds: true,
+      idTypes: true,
+    },
+  });
+
+  return result;
+};
+
 export const countryService = {
   insertIntoDB,
   findAll,
@@ -167,4 +181,5 @@ export const countryService = {
   findAllCountry,
   findCountriesWill,
   activeStatus,
+  findActiveCountryWill,
 };

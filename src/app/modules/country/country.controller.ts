@@ -112,6 +112,17 @@ const getAllCountriesWills = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getActiveCountryWill = catchAsync(async (req: Request, res: Response) => {
+  const result = await countryService.findActiveCountryWill();
+
+  sendResponse<Country>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Countrry Will Get Successfully!",
+    data: result,
+  });
+});
+
 export const countryController = {
   create,
   getAll,
@@ -120,4 +131,5 @@ export const countryController = {
   getAllCountries,
   getAllCountriesWills,
   changeWillStatus,
+  getActiveCountryWill,
 };

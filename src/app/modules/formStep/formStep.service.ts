@@ -118,10 +118,7 @@ const findOne = async (payload: FormStep): Promise<FormStep | null> => {
   return result;
 };
 
-const findCountryFromSteps = async (
-  countryId: string,
-  value: string
-): Promise<FormStep[]> => {
+const findCountryFromSteps = async (value: string): Promise<FormStep[]> => {
   const result = await prisma.formStep.findMany({
     where: {
       // countryId,
@@ -142,6 +139,29 @@ const findCountryFromSteps = async (
   return result;
 };
 
+const findWillStep = async (
+  value: string,
+  countryId: string
+): Promise<FormStep | null> => {
+  const result = await prisma.formStep.findUnique({
+    where: {
+      value,
+    },
+    include: {
+      stepFilds: {
+        where: {
+          countryId,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+    },
+  });
+
+  return result;
+};
+
 export const formStepService = {
   insertIntoDB,
   findAll,
@@ -149,4 +169,5 @@ export const formStepService = {
   deleteById,
   findOne,
   findCountryFromSteps,
+  findWillStep,
 };

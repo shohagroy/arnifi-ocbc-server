@@ -27,6 +27,9 @@ router
   .delete(
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
     formStepController.deleteOne
-  );
+  )
+  .get(formStepController.getWillStep);
+
+router.route("/:value/:countryId").get(formStepController.getWillStep);
 
 export const formStepRoutes = router;

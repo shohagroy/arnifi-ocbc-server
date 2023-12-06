@@ -14,6 +14,8 @@ router
     countryController.getAllCountriesWills
   );
 
+router.route("/wills/active").get(countryController.getActiveCountryWill);
+
 router
   .route("/wills-status/:id")
   .patch(

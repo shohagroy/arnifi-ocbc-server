@@ -38,9 +38,7 @@ model Country {
 
   addresses Address[]
   idTypes   IDType[]
-  // formStep  FormStep[] // Define the one-to-one relation
 
-  // formSteps FormStep[]
   stepFilds StepFild[]
 
   @@map("countries")
