@@ -22,7 +22,7 @@ const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
             placeholder: data.placeholder,
             errorText: data.errorText,
             type: data.type,
-            stepId: data.stepId,
+            stepValue: data.stepValue,
             countryId: data.countryId,
             isRequired: data.isRequired,
         },
@@ -97,7 +97,7 @@ const updateById = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
             placeholder: payload.placeholder,
             errorText: payload.errorText,
             type: payload.type,
-            stepId: payload.stepId,
+            stepValue: payload.stepValue,
             countryId: payload.countryId,
             isRequired: payload.isRequired,
         },
@@ -118,7 +118,7 @@ const findOne = (payload) => __awaiter(void 0, void 0, void 0, function* () {
             name: payload.name,
             type: payload.type,
             countryId: payload.countryId,
-            stepId: payload.stepId,
+            stepValue: payload.stepValue,
         },
     });
     return result;
@@ -127,7 +127,6 @@ const findStepFilds = (countryId, stepId) => __awaiter(void 0, void 0, void 0, f
     const result = yield prisma_1.default.stepFild.findMany({
         where: {
             countryId,
-            stepId,
         },
         orderBy: {
             createdAt: "asc",

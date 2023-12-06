@@ -28,6 +28,7 @@ const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const formStep_constants_1 = require("./formStep.constants");
 const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    // console.log(data);
     const result = yield prisma_1.default.formStep.create({
         data,
     });
@@ -47,24 +48,24 @@ const findAll = (paginationOptions, filters) => __awaiter(void 0, void 0, void 0
             })),
         });
     }
-    if (Object.keys(filterData).length > 0) {
-        andConditions.push({
-            AND: Object.keys(filterData).map((key) => {
-                if (key === "countryId") {
-                    return {
-                        [key]: {
-                            equals: filterData[key],
-                        },
-                    };
-                }
-            }),
-        });
-    }
+    // if (Object.keys(filterData).length > 0) {
+    //   andConditions.push({
+    //     AND: Object.keys(filterData).map((key) => {
+    //       if (key === "countryId") {
+    //         return {
+    //           [key]: {
+    //             equals: filterData[key],
+    //           },
+    //         };
+    //       }
+    //     }),
+    //   });
+    // }
     const whereConditions = andConditions.length > 0 ? { AND: andConditions } : {};
     const result = yield prisma_1.default.formStep.findMany({
         where: whereConditions,
         include: {
-            country: true,
+            stepFilds: true,
         },
         skip,
         take: size,
@@ -91,7 +92,7 @@ const updateById = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
         where: { id },
         data: {
             tittle: payload.tittle,
-            countryId: payload.countryId,
+            // countryId: payload.countryId,
         },
     });
     return result;
@@ -108,15 +109,17 @@ const findOne = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.formStep.findFirst({
         where: {
             tittle: payload.tittle,
-            countryId: payload.countryId,
+            // countryId: payload.countryId,
+            value: payload.value,
         },
     });
     return result;
 });
-const findCountryFromSteps = (countryId) => __awaiter(void 0, void 0, void 0, function* () {
+const findCountryFromSteps = (value) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.formStep.findMany({
         where: {
-            countryId,
+            // countryId,
+            value,
         },
         include: {
             stepFilds: {
@@ -131,6 +134,24 @@ const findCountryFromSteps = (countryId) => __awaiter(void 0, void 0, void 0, fu
     });
     return result;
 });
+const findWillStep = (value, countryId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.formStep.findUnique({
+        where: {
+            value,
+        },
+        include: {
+            stepFilds: {
+                where: {
+                    countryId,
+                },
+                orderBy: {
+                    createdAt: "asc",
+                },
+            },
+        },
+    });
+    return result;
+});
 exports.formStepService = {
     insertIntoDB,
     findAll,
@@ -138,4 +159,5 @@ exports.formStepService = {
     deleteById,
     findOne,
     findCountryFromSteps,
+    findWillStep,
 };

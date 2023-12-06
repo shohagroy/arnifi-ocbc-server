@@ -17,5 +17,7 @@ router
 router
     .route("/:id")
     .patch((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), formStep_controller_1.formStepController.updateOne)
-    .delete((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), formStep_controller_1.formStepController.deleteOne);
+    .delete((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), formStep_controller_1.formStepController.deleteOne)
+    .get(formStep_controller_1.formStepController.getWillStep);
+router.route("/:value/:countryId").get(formStep_controller_1.formStepController.getWillStep);
 exports.formStepRoutes = router;

@@ -22,13 +22,13 @@ const create = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0,
     var _a;
     const isExists = yield stepField_service_1.stepFildService.findOne(req.body);
     if (isExists) {
-        throw new ApiError_1.default(http_status_1.default.CONFLICT, `${(_a = req.body) === null || _a === void 0 ? void 0 : _a.label} Step Fild is already exists!`);
+        throw new ApiError_1.default(http_status_1.default.CONFLICT, `${(_a = req.body) === null || _a === void 0 ? void 0 : _a.label} Step Fields is already exists!`);
     }
     const result = yield stepField_service_1.stepFildService.insertIntoDB(req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Stpe Fild Created Successfully!",
+        message: "Stpe Fields Created Successfully!",
         data: result,
     });
 }));
@@ -58,7 +58,7 @@ const updateOne = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Step Fild Update Successfully!",
+        message: "Step Fields Update Successfully!",
         data: result,
     });
 }));
@@ -68,7 +68,7 @@ const deleteOne = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Step Fild Delete Successfully!",
+        message: "Step Fields Delete Successfully!",
         data: result,
     });
 }));
@@ -78,7 +78,7 @@ const getAllStepTypes = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Step Filds Get Successfully!",
+        message: "Step Fields Get Successfully!",
         data: result,
     });
 }));

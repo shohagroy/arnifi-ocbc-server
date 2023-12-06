@@ -61,6 +61,16 @@ const updateOne = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         data: result,
     });
 }));
+const changeWillStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield country_service_1.countryService.activeStatus(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Wills Status Update Successfully!",
+        data: result,
+    });
+}));
 const deleteOne = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const result = yield country_service_1.countryService.deleteById(id);
@@ -80,10 +90,31 @@ const getAllCountries = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
         data: result,
     });
 }));
+const getAllCountriesWills = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield country_service_1.countryService.findCountriesWill();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Countries Will Get Successfully!",
+        data: result,
+    });
+}));
+const getActiveCountryWill = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield country_service_1.countryService.findActiveCountryWill();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Countrry Will Get Successfully!",
+        data: result,
+    });
+}));
 exports.countryController = {
     create,
     getAll,
     updateOne,
     deleteOne,
     getAllCountries,
+    getAllCountriesWills,
+    changeWillStatus,
+    getActiveCountryWill,
 };

@@ -104,7 +104,58 @@ const findAllCountry = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.country.findMany({
         include: {
             idTypes: true,
-            formSteps: true,
+        },
+        orderBy: {
+            name: "asc",
+        },
+    });
+    return result;
+});
+const findCountriesWill = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.country.findMany({
+        where: {
+            stepFilds: {
+                some: {},
+            },
+        },
+        include: {
+            stepFilds: true,
+        },
+        orderBy: {
+            name: "asc",
+        },
+    });
+    return result;
+});
+const activeStatus = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.$transaction((transactionClient) => __awaiter(void 0, void 0, void 0, function* () {
+        yield transactionClient.country.updateMany({
+            where: {
+                isActive: true,
+            },
+            data: {
+                isActive: false,
+            },
+        });
+        return yield transactionClient.country.update({
+            where: {
+                id,
+            },
+            data: {
+                isActive: true,
+            },
+        });
+    }));
+    return result;
+});
+const findActiveCountryWill = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.country.findFirst({
+        where: {
+            isActive: true,
+        },
+        include: {
+            stepFilds: true,
+            idTypes: true,
         },
     });
     return result;
@@ -116,4 +167,7 @@ exports.countryService = {
     deleteById,
     findOne,
     findAllCountry,
+    findCountriesWill,
+    activeStatus,
+    findActiveCountryWill,
 };
