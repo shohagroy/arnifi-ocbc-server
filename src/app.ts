@@ -10,7 +10,9 @@ const app = express();
 
 app.use(
   cors({
+    // origin: "https://arnifi-ocbc-client.vercel.app",
     origin: ["http://localhost:3000", `${envconfig.client_url}`],
+
     // envconfig.node_env !== "development"
     //   ? "http://localhost:3000"
     //   : envconfig.client_url,
@@ -21,6 +23,13 @@ app.use(
   })
 );
 
+// app.use(
+//   cors({
+//     origin: "https://arnifi-ocbc-client.vercel.app",
+//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//     credentials: true,
+//   })
+// );
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());

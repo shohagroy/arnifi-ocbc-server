@@ -12,6 +12,7 @@ const envconfig_1 = __importDefault(require("./config/envconfig"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
+    // origin: "https://arnifi-ocbc-client.vercel.app",
     origin: ["http://localhost:3000", `${envconfig_1.default.client_url}`],
     // envconfig.node_env !== "development"
     //   ? "http://localhost:3000"
@@ -21,6 +22,13 @@ app.use((0, cors_1.default)({
     optionsSuccessStatus: 204,
     credentials: true,
 }));
+// app.use(
+//   cors({
+//     origin: "https://arnifi-ocbc-client.vercel.app",
+//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//     credentials: true,
+//   })
+// );
 app.use(express_1.default.json({ limit: "50mb" }));
 app.use(express_1.default.urlencoded({ extended: true, limit: "50mb" }));
 app.use((0, cookie_parser_1.default)());
