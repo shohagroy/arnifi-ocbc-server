@@ -85,7 +85,6 @@ const updateById = async (
     where: { id },
     data: {
       name: payload.name,
-      postalCode: payload.postalCode,
       countryCode: payload.countryCode,
     },
   });
