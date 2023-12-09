@@ -6,6 +6,7 @@ import { ENUM_USER_ROLE } from "../user/user.constants";
 const router = express.Router();
 
 router.route("/get-all").get(countryController.getAllCountries);
+router.route("/wills/active").get(countryController.getActiveCountryWill);
 
 router
   .route("/wills")
@@ -13,8 +14,6 @@ router
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
     countryController.getAllCountriesWills
   );
-
-router.route("/wills/active").get(countryController.getActiveCountryWill);
 
 router
   .route("/wills-status/:id")

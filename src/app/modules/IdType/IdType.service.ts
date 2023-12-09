@@ -116,24 +116,10 @@ const findOne = async (payload: IDType): Promise<IDType | null> => {
   return result;
 };
 
-const findAllType = async (countryId: string): Promise<IDType[]> => {
-  const result = await prisma.iDType.findMany({
-    where: {
-      countryId,
-    },
-    orderBy: {
-      tittle: "asc",
-    },
-  });
-
-  return result;
-};
-
 export const idTypeService = {
   insertIntoDB,
   findAll,
   updateById,
   deleteById,
   findOne,
-  findAllType,
 };

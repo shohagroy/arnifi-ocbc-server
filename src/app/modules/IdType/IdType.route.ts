@@ -5,8 +5,6 @@ import { idTypeController } from "./IdType.controller";
 
 const router = express.Router();
 
-router.route("/get-all/countryId").get(idTypeController.getAllIdTypes);
-
 router
   .route("/")
   .get(

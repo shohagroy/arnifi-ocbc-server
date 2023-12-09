@@ -9,13 +9,24 @@ import pick from "../../../shared/pick";
 import ApiError from "../../../errors/ApiError";
 import { Country } from "@prisma/client";
 
+const getAllCountries = catchAsync(async (req: Request, res: Response) => {
+  const result = await countryService.findAllCountry();
+
+  sendResponse<Country[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Countries Get Successfully!",
+    data: result,
+  });
+});
+
 const create = catchAsync(async (req: Request, res: Response) => {
   const isExists = await countryService.findOne(req.body);
 
   if (isExists) {
     throw new ApiError(
       httpStatus.CONFLICT,
-      `${req.body?.name} country name is already exists!`
+      `${req.body?.name} Country name is already exists!`
     );
   }
 
@@ -86,17 +97,6 @@ const deleteOne = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Country Delete Successfully!",
-    data: result,
-  });
-});
-
-const getAllCountries = catchAsync(async (req: Request, res: Response) => {
-  const result = await countryService.findAllCountry();
-
-  sendResponse<Country[]>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Countries Get Successfully!",
     data: result,
   });
 });

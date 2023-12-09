@@ -79,22 +79,9 @@ const deleteOne = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getAllIdTypes = catchAsync(async (req: Request, res: Response) => {
-  const { countryId } = req.params;
-  const result = await idTypeService.findAllType(countryId);
-
-  sendResponse<IDType[]>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "ID Types Get Successfully!",
-    data: result,
-  });
-});
-
 export const idTypeController = {
   create,
   getAll,
   updateOne,
   deleteOne,
-  getAllIdTypes,
 };

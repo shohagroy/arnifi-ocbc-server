@@ -5,8 +5,6 @@ import { formStepController } from "./formStep.controller";
 
 const router = express.Router();
 
-router.route("/get-all/:countryId").get(formStepController.getCountryFormStep);
-
 router
   .route("/")
   .get(

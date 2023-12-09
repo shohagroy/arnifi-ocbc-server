@@ -6,15 +6,7 @@ import { stepFildController } from "./stepField.controller";
 const router = express.Router();
 
 router
-  .route("/get-all/:countryId/:stepId")
-  .get(stepFildController.getAllStepTypes);
-
-router
   .route("/")
-  // .get(
-  //   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  //   stepFildController.getAll
-  // )
   .post(
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
     stepFildController.create

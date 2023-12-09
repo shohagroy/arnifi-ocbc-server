@@ -5,6 +5,19 @@ import { ICountryFilters } from "./country.interface";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { countrySearchableFields } from "./country.constants";
 
+const findAllCountry = async (): Promise<Country[]> => {
+  const result = await prisma.country.findMany({
+    include: {
+      idTypes: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return result;
+};
+
 const insertIntoDB = async (data: Country): Promise<Country> => {
   const result = await prisma.country.create({
     data,
@@ -90,31 +103,6 @@ const deleteById = async (id: string): Promise<Country | null> => {
   return result;
 };
 
-const findOne = async (data: Country): Promise<Country | null> => {
-  const result = await prisma.country.findUnique({
-    where: {
-      name: data.name,
-      postalCode: data.postalCode,
-      countryCode: data.countryCode,
-    },
-  });
-
-  return result;
-};
-
-const findAllCountry = async (): Promise<Country[]> => {
-  const result = await prisma.country.findMany({
-    include: {
-      idTypes: true,
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
-
-  return result;
-};
-
 const findCountriesWill = async (): Promise<Country[]> => {
   const result = await prisma.country.findMany({
     where: {
@@ -172,13 +160,24 @@ const findActiveCountryWill = async (): Promise<Country | null> => {
   return result;
 };
 
+const findOne = async (data: Country): Promise<Country | null> => {
+  const result = await prisma.country.findUnique({
+    where: {
+      name: data.name,
+      countryCode: data.countryCode,
+    },
+  });
+
+  return result;
+};
+
 export const countryService = {
+  findAllCountry,
   insertIntoDB,
+  findOne,
   findAll,
   updateById,
   deleteById,
-  findOne,
-  findAllCountry,
   findCountriesWill,
   activeStatus,
   findActiveCountryWill,
