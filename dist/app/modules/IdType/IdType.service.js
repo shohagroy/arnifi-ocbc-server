@@ -113,22 +113,10 @@ const findOne = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
-const findAllType = (countryId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.iDType.findMany({
-        where: {
-            countryId,
-        },
-        orderBy: {
-            tittle: "asc",
-        },
-    });
-    return result;
-});
 exports.idTypeService = {
     insertIntoDB,
     findAll,
     updateById,
     deleteById,
     findOne,
-    findAllType,
 };

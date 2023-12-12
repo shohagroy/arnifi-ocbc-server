@@ -71,16 +71,16 @@ const deleteOne = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         data: result,
     });
 }));
-const getCountryFormStep = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, countryId } = req.params;
-    const result = yield formStep_service_1.formStepService.findCountryFromSteps(countryId);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_1.default.OK,
-        success: true,
-        message: "Country Form Steps Get Successfully!",
-        data: result,
-    });
-}));
+// const getCountryFormStep = catchAsync(async (req: Request, res: Response) => {
+//   const { id, countryId } = req.params;
+//   const result = await formStepService.findCountryFromSteps(countryId);
+//   sendResponse<FormStep[]>(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "Country Form Steps Get Successfully!",
+//     data: result,
+//   });
+// });
 const getWillStep = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { value, countryId } = req.params;
     const result = yield formStep_service_1.formStepService.findWillStep(value, countryId);
@@ -96,6 +96,5 @@ exports.formStepController = {
     getAll,
     updateOne,
     deleteOne,
-    getCountryFormStep,
     getWillStep,
 };

@@ -10,10 +10,10 @@ const auth_1 = __importDefault(require("../../middlewares/auth"));
 const user_constants_1 = require("../user/user.constants");
 const router = express_1.default.Router();
 router.route("/get-all").get(country_controller_1.countryController.getAllCountries);
+router.route("/wills/active").get(country_controller_1.countryController.getActiveCountryWill);
 router
     .route("/wills")
     .get((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), country_controller_1.countryController.getAllCountriesWills);
-router.route("/wills/active").get(country_controller_1.countryController.getActiveCountryWill);
 router
     .route("/wills-status/:id")
     .patch((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), country_controller_1.countryController.changeWillStatus);

@@ -15,6 +15,15 @@ const createPdf = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const createPdfServer = catchAsync(async (req: Request, res: Response) => {
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "server is running!",
+  });
+});
+
 export const explorePdfController = {
   createPdf,
+  createPdfServer,
 };

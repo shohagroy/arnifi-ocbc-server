@@ -9,7 +9,6 @@ const auth_1 = __importDefault(require("../../middlewares/auth"));
 const user_constants_1 = require("../user/user.constants");
 const formStep_controller_1 = require("./formStep.controller");
 const router = express_1.default.Router();
-router.route("/get-all/:countryId").get(formStep_controller_1.formStepController.getCountryFormStep);
 router
     .route("/")
     .get((0, auth_1.default)(user_constants_1.ENUM_USER_ROLE.ADMIN, user_constants_1.ENUM_USER_ROLE.SUPER_ADMIN), formStep_controller_1.formStepController.getAll)

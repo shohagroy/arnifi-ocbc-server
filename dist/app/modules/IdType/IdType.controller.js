@@ -71,20 +71,9 @@ const deleteOne = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         data: result,
     });
 }));
-const getAllIdTypes = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { countryId } = req.params;
-    const result = yield IdType_service_1.idTypeService.findAllType(countryId);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_1.default.OK,
-        success: true,
-        message: "ID Types Get Successfully!",
-        data: result,
-    });
-}));
 exports.idTypeController = {
     create,
     getAll,
     updateOne,
     deleteOne,
-    getAllIdTypes,
 };

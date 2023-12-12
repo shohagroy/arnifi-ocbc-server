@@ -27,6 +27,17 @@ exports.countryService = void 0;
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const country_constants_1 = require("./country.constants");
+const findAllCountry = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.country.findMany({
+        include: {
+            idTypes: true,
+        },
+        orderBy: {
+            name: "asc",
+        },
+    });
+    return result;
+});
 const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.country.create({
         data,
@@ -76,7 +87,6 @@ const updateById = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
         where: { id },
         data: {
             name: payload.name,
-            postalCode: payload.postalCode,
             countryCode: payload.countryCode,
         },
     });
@@ -86,27 +96,6 @@ const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.country.delete({
         where: {
             id,
-        },
-    });
-    return result;
-});
-const findOne = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.country.findUnique({
-        where: {
-            name: data.name,
-            postalCode: data.postalCode,
-            countryCode: data.countryCode,
-        },
-    });
-    return result;
-});
-const findAllCountry = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.country.findMany({
-        include: {
-            idTypes: true,
-        },
-        orderBy: {
-            name: "asc",
         },
     });
     return result;
@@ -160,13 +149,22 @@ const findActiveCountryWill = () => __awaiter(void 0, void 0, void 0, function* 
     });
     return result;
 });
+const findOne = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.country.findUnique({
+        where: {
+            name: data.name,
+            countryCode: data.countryCode,
+        },
+    });
+    return result;
+});
 exports.countryService = {
+    findAllCountry,
     insertIntoDB,
+    findOne,
     findAll,
     updateById,
     deleteById,
-    findOne,
-    findAllCountry,
     findCountriesWill,
     activeStatus,
     findActiveCountryWill,

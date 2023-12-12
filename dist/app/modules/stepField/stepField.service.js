@@ -29,65 +29,6 @@ const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
-// const findAll = async (
-//   paginationOptions: IPaginationOptions,
-//   filters: IIDTypeFilters
-// ) => {
-//   const { size, page, skip } =
-//     paginationHelpers.calculatePagination(paginationOptions);
-//   const { search, ...filterData } = filters;
-//   const andConditions = [];
-//   if (search) {
-//     andConditions.push({
-//       OR: idTypeSearchableFields.map((field) => ({
-//         [field]: {
-//           contains: search,
-//           mode: "insensitive",
-//         },
-//       })),
-//     });
-//   }
-//   if (Object.keys(filterData).length > 0) {
-//     andConditions.push({
-//       AND: Object.keys(filterData).map((key) => {
-//         if (key === "countryId") {
-//           return {
-//             [key]: {
-//               equals: filterData[key],
-//             },
-//           };
-//         }
-//       }),
-//     });
-//   }
-//   const whereConditions: Prisma.IDTypeWhereInput | {} =
-//     andConditions.length > 0 ? { AND: andConditions } : {};
-//   const result = await prisma.iDType.findMany({
-//     where: whereConditions,
-//     include: {
-//       country: true,
-//     },
-//     skip,
-//     take: size,
-//     orderBy:
-//       paginationOptions.sortBy && paginationOptions.sortOrder
-//         ? { [paginationOptions.sortBy]: paginationOptions.sortOrder }
-//         : {
-//             tittle: "asc",
-//           },
-//   });
-//   const total = await prisma.iDType.count({
-//     where: whereConditions,
-//   });
-//   return {
-//     meta: {
-//       total,
-//       page,
-//       size,
-//     },
-//     data: result,
-//   };
-// };
 const updateById = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.stepFild.update({
         where: { id },
@@ -123,21 +64,9 @@ const findOne = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
-const findStepFilds = (countryId, stepId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.stepFild.findMany({
-        where: {
-            countryId,
-        },
-        orderBy: {
-            createdAt: "asc",
-        },
-    });
-    return result;
-});
 exports.stepFildService = {
     insertIntoDB,
     updateById,
     deleteById,
-    findStepFilds,
     findOne,
 };

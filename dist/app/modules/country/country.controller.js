@@ -21,11 +21,20 @@ const pagination_1 = require("../../../constants/pagination");
 const country_constants_1 = require("./country.constants");
 const pick_1 = __importDefault(require("../../../shared/pick"));
 const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
+const getAllCountries = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield country_service_1.countryService.findAllCountry();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Countries Get Successfully!",
+        data: result,
+    });
+}));
 const create = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const isExists = yield country_service_1.countryService.findOne(req.body);
     if (isExists) {
-        throw new ApiError_1.default(http_status_1.default.CONFLICT, `${(_a = req.body) === null || _a === void 0 ? void 0 : _a.name} country name is already exists!`);
+        throw new ApiError_1.default(http_status_1.default.CONFLICT, `${(_a = req.body) === null || _a === void 0 ? void 0 : _a.name} Country name is already exists!`);
     }
     const result = yield country_service_1.countryService.insertIntoDB(req.body);
     (0, sendResponse_1.default)(res, {
@@ -78,15 +87,6 @@ const deleteOne = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
         statusCode: http_status_1.default.OK,
         success: true,
         message: "Country Delete Successfully!",
-        data: result,
-    });
-}));
-const getAllCountries = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield country_service_1.countryService.findAllCountry();
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_1.default.OK,
-        success: true,
-        message: "Countries Get Successfully!",
         data: result,
     });
 }));

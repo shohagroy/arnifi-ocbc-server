@@ -115,25 +115,25 @@ const findOne = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
-const findCountryFromSteps = (value) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.formStep.findMany({
-        where: {
-            // countryId,
-            value,
-        },
-        include: {
-            stepFilds: {
-                orderBy: {
-                    createdAt: "asc",
-                },
-            },
-        },
-        orderBy: {
-            createdAt: "asc",
-        },
-    });
-    return result;
-});
+// const findCountryFromSteps = async (value: string): Promise<FormStep[]> => {
+//   const result = await prisma.formStep.findMany({
+//     where: {
+//       // countryId,
+//       value,
+//     },
+//     include: {
+//       stepFilds: {
+//         orderBy: {
+//           createdAt: "asc",
+//         },
+//       },
+//     },
+//     orderBy: {
+//       createdAt: "asc",
+//     },
+//   });
+//   return result;
+// };
 const findWillStep = (value, countryId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.formStep.findUnique({
         where: {
@@ -158,6 +158,5 @@ exports.formStepService = {
     updateById,
     deleteById,
     findOne,
-    findCountryFromSteps,
     findWillStep,
 };

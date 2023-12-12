@@ -5,6 +5,9 @@ import { explorePdfController } from "./explorePdf.controller";
 
 const router = express.Router();
 
-router.route("/").post(explorePdfController.createPdf);
+router
+  .route("/")
+  .post(explorePdfController.createPdf)
+  .get(explorePdfController.createPdfServer);
 
 export const explorePdfRoute = router;

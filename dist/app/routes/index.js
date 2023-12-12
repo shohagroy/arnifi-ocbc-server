@@ -10,6 +10,7 @@ const country_route_1 = require("../modules/country/country.route");
 const IdType_route_1 = require("../modules/IdType/IdType.route");
 const stepField_route_1 = require("../modules/stepField/stepField.route");
 const formStep_route_1 = require("../modules/formStep/formStep.route");
+const explorePdf_route_1 = require("../modules/explorePdf/explorePdf.route");
 const router = express_1.default.Router();
 const moduleRoutes = [
     {
@@ -35,6 +36,10 @@ const moduleRoutes = [
     {
         path: "/step-filds",
         route: stepField_route_1.stepFildRoutes,
+    },
+    {
+        path: "/create-pdf",
+        route: explorePdf_route_1.explorePdfRoute,
     },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
