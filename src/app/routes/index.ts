@@ -5,6 +5,7 @@ import { countryRoutes } from "../modules/country/country.route";
 import { idTypeRoutes } from "../modules/IdType/IdType.route";
 import { stepFildRoutes } from "../modules/stepField/stepField.route";
 import { formStepRoutes } from "../modules/formStep/formStep.route";
+import { explorePdfRoute } from "../modules/explorePdf/explorePdf.route";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -31,6 +32,10 @@ const moduleRoutes = [
   {
     path: "/step-filds",
     route: stepFildRoutes,
+  },
+  {
+    path: "/create-pdf",
+    route: explorePdfRoute,
   },
 ];
 
